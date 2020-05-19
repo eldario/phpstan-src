@@ -299,8 +299,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$phpDocNodeResolver = self::getContainer()->getByType(PhpDocNodeResolver::class);
 		$currentWorkingDirectory = $this->getCurrentWorkingDirectory();
 		$fileHelper = new FileHelper($currentWorkingDirectory);
+		$currentWorkingDirectory = $fileHelper->normalizePath($currentWorkingDirectory, '/');
+		$fileHelper = new FileHelper($currentWorkingDirectory);
 		$relativePathHelper = new SimpleRelativePathHelper($currentWorkingDirectory);
-		$anonymousClassNameHelper = new AnonymousClassNameHelper(new FileHelper($currentWorkingDirectory), new SimpleRelativePathHelper($fileHelper->normalizePath($currentWorkingDirectory, '/')));
+		$anonymousClassNameHelper = new AnonymousClassNameHelper($fileHelper, $relativePathHelper);
 		$setterReflectionProviderProvider = new ReflectionProvider\SetterReflectionProviderProvider();
 		$fileTypeMapper = new FileTypeMapper($setterReflectionProviderProvider, $parser, $phpDocStringResolver, $phpDocNodeResolver, $cache, $anonymousClassNameHelper);
 		$classReflectionExtensionRegistryProvider = $this->getClassReflectionExtensionRegistryProvider();
@@ -436,8 +438,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$parser = $this->getParser();
 		$phpDocStringResolver = self::getContainer()->getByType(PhpDocStringResolver::class);
 		$phpDocNodeResolver = self::getContainer()->getByType(PhpDocNodeResolver::class);
-		$currentWorkingDirectory = $this->getCurrentWorkingDirectory();
 		$cache = new Cache(new MemoryCacheStorage());
+		$currentWorkingDirectory = $this->getCurrentWorkingDirectory();
+		$fileHelper = new FileHelper($currentWorkingDirectory);
+		$currentWorkingDirectory = $fileHelper->normalizePath($currentWorkingDirectory, '/');
 		$fileHelper = new FileHelper($currentWorkingDirectory);
 		$relativePathHelper = new SimpleRelativePathHelper($currentWorkingDirectory);
 		$anonymousClassNameHelper = new AnonymousClassNameHelper($fileHelper, $relativePathHelper);
